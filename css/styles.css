@@ -1,0 +1,55 @@
+/* Add general styles for the app */
+body {
+  font-family: 'Poppins', ui-sans-serif, system-ui;
+  background-color: #e7f6f2; /* Tailwind's unifespGreen-50 */
+  min-height: 100vh;
+}
+
+.navbar {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+
+.navbar .title {
+  color: #10403a; /* Tailwind's unifespGreen-700 */
+  font-weight: bold;
+}
+
+.button {
+  background-color: #1a6d5b; /* Tailwind's unifespGreen-500 */
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #15574b; /* Tailwind's unifespGreen-600 */
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.card-header {
+  color: #10403a;
+  font-size: 1.875rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  color: #10403a;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.text-muted {
+  color: #6b7280; /* Tailwind gray-600 */
+}

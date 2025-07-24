@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Verificador de Credenciais - UNIFESP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/tailwind-config.js"></script>
+</head>
+<body class="bg-unifespGreen-50 min-h-screen font-sans">
+  <div id="header"></div>
+  
+  <!-- Verificador de Acesso -->
+  <div class="max-w-4xl mx-auto px-4">
+    <h2 class="card-header text-center">Verificador de Acesso</h2>
+
+    <div class="grid md:grid-cols-3 gap-6 mt-8">
+      <div class="card bg-white">
+        <h3 class="section-title">Laboratório de Redes</h3>
+        <input type="text" id="networks-url" placeholder="Cole aqui a URL da credencial" class="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-unifespGreen-400" />
+        <button class="button w-full" onclick="verificarAcesso('Laboratório de Redes', 'networks-url', 'networks-result')">Verificar Acesso</button>
+        <div id="networks-result" class="hidden mt-4"></div>
+      </div>
+      
+      <div class="card bg-white">
+        <h3 class="section-title">Laboratório de IA</h3>
+        <input type="text" id="ai-url" placeholder="Cole aqui a URL da credencial" class="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-unifespGreen-400" />
+        <button class="button w-full" onclick="verificarAcesso('Laboratório de IA', 'ai-url', 'ai-result')">Verificar Acesso</button>
+        <div id="ai-result" class="hidden mt-4"></div>
+      </div>
+
+      <div class="card bg-white">
+        <h3 class="section-title">Laboratório de Sistemas Embarcados</h3>
+        <input type="text" id="embedded-url" placeholder="Cole aqui a URL da credencial" class="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-unifespGreen-400" />
+        <button class="button w-full" onclick="verificarAcesso('Laboratório de Sistemas Embarcados', 'embedded-url', 'embedded-result')">Verificar Acesso</button>
+        <div id="embedded-result" class="hidden mt-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/credentials.js"></script>
+  <script src="js/verificador.js"></script>
+  <script>
+    document.getElementById('header').innerHTML = '<include src="components/header.html"></include>';
+  </script>
+</body>
+</html>

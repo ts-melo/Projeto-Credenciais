@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sistema de Credenciais UNIFESP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/tailwind-config.js"></script>
+</head>
+<body class="bg-unifespGreen-50 min-h-screen font-sans">
+  <div id="header"></div>
+  
+  <div id="home-page" class="max-w-4xl mx-auto px-4">
+    <div class="card">
+      <h2 class="card-header text-center">Credenciais Verificáveis</h2>
+      
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div class="bg-unifespGreen-50 p-6 rounded-xl">
+          <h3 class="text-xl font-semibold text-unifespGreen-700 mb-3">Emissor de Credenciais</h3>
+          <p class="text-gray-700 mb-4">Crie credenciais verificáveis para acesso aos laboratórios da UNIFESP.</p>
+          <a href="emissor.html" class="button">Acessar Emissor</a>
+        </div>
+        
+        <div class="bg-unifespGreen-50 p-6 rounded-xl">
+          <h3 class="text-xl font-semibold text-unifespGreen-700 mb-3">Laboratórios</h3>
+          <p class="text-gray-700 mb-4">Verifique o acesso aos laboratórios usando URLs de credenciais.</p>
+          <a href="verificador.html" class="button">Acessar Laboratórios</a>
+        </div>
+      </div>
+
+      <div class="border-t pt-6">
+        <h3 class="section-title">Usuários com Credenciais Emitidas</h3>
+        <div id="usuarios-lista" class="space-y-3">
+          <!-- Users will be loaded here -->
+        </div>
+        <div id="credenciais-emitidas" class="hidden space-y-3 mt-6">
+          <!-- Credentials for a selected user will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/credentials.js"></script>
+  <script src="js/navigation.js"></script>
+<script>
+  document.getElementById('header').innerHTML = '<include src="components/header.html"></include>';
+
+  function loadUsers() {
+    const userContainer = document.getElementById('usuarios-lista');
+    const credenciais = JSON.parse(localStorage.getItem('unifesp_credenciais') || '{}');
+    const users = {};
+
+    Object.values(credenciais).forEach(vc => {
+      const name = vc.credentialSubject.name;
+      if (!users[name]) {
+        users[name] = [];
+      }
+      users[name].push(vc);
+    });
+
+    if (Object.keys(users).length === 0) {
+      userContainer.innerHTML = '<p class="text-gray-500 text-center py-4">Nenhum usuário com credenciais emitidas.</p>';
+      return;
+    }
+
+    userContainer.innerHTML = '';
+    Object.keys(users).forEach(name => {
+      const div = document.createElement('div');
+      div.className = 'border rounded-lg p-4 bg-gray-50 cursor-pointer hover:bg-gray-100';
+      div.innerHTML = `<h4 class="font-semibold">${name}</h4>`;
+      div.onclick = () => showUserCredentials(name, users[name]);
+      userContainer.appendChild(div);
+    });
+  }
+
+  function showUserCredentials(name, userCredentials) {
+    const container = document.getElementById('credenciais-emitidas');
+    container.innerHTML = `<h4 class="font-semibold text-unifespGreen-700 mb-3">Credenciais de ${name}</h4>`;
+
+    userCredentials.forEach(vc => {
+      const url = generateCredentialUrl(vc._internal.id);
+      const div = document.createElement('div');
+      div.className = 'border rounded-lg p-4 bg-gray-50';
+      div.innerHTML = `
+        <p class="text-sm" onclick="toggleDetails('${vc._internal.id}')">${vc.credentialSubject.role} - ${vc.credentialSubject.accessPermissions.length} permissões ${vc.revoked?'(Revoked)' :' '}</p>
+        <p class="text-xs text-gray-500">ID: ${vc._internal.id}</p>
+        <div id="details-${vc._internal.id}" class="hidden mt-2">
+          <pre class="bg-gray-100 p-3 rounded text-xs overflow-auto max-h-40">${JSON.stringify(vc, null, 2)}</pre>
+        </div>
+        <div class="mt-2">
+          <button onclick="copyToClipboardManual('${url}')" class="button text-sm">Copiar URL</button>
+          <button onclick="deleteCredential('${vc._internal.id}', '${name}')" class="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">Excluir</button>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+
+    container.classList.remove('hidden');
+    container.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function deleteCredential(id, userName) {
+    if (confirm('Tem certeza que deseja excluir esta credencial?')) {
+      const credenciais = JSON.parse(localStorage.getItem('unifesp_credenciais') || '{}');
+      delete credenciais[id];
+      localStorage.setItem('unifesp_credenciais', JSON.stringify(credenciais));
+      loadUsers();
+      document.getElementById('credenciais-emitidas').classList.add('hidden');
+      alert(`A credencial de ${userName} foi excluída com sucesso!`);
+    }
+  }
+
+  function copyToClipboardManual(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('URL copiada para a área de transferência!');
+    }).catch(err => {
+      console.error('Erro ao copiar:', err);
+      alert('Erro ao copiar a URL');
+    });
+  }
+
+  function toggleDetails(id) {
+    const detailsDiv = document.getElementById(`details-${id}`);
+    if (detailsDiv.classList.contains('hidden')) {
+      detailsDiv.classList.remove('hidden');
+    } else {
+      detailsDiv.classList.add('hidden');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadUsers);
+</script>
+
+</body>
+</html>

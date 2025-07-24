@@ -1,0 +1,6 @@
+2025/07/02-19:52:40.049 51dc Recovering log #25
+2025/07/02-19:52:40.049 51dc Level-0 table #27: started
+2025/07/02-19:52:40.052 51dc Level-0 table #27: 3761 bytes OK
+2025/07/02-19:52:40.062 51dc Delete type=0 #25
+2025/07/02-19:52:40.062 51dc Delete type=3 #23
+2025/07/02-19:52:40.062 4e40 Moved #13 to level-1 3758 bytes OK: files[ 3 4 0 0 0 0 0 ]
